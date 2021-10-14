@@ -13,7 +13,6 @@ class Start():
         self.STATE = State()
         self.my_state = 'GUIDED_NOGPS'
         self.Altitude = Altitude()
-        self.node = rospy.init_node('OffBoard', anonymous=True)
         
         self.set_services()
         self.set_mode()

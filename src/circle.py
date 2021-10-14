@@ -2,13 +2,13 @@
 
 import rospy
 import mavros
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, Twist
 from mavros_msgs.msg import State 
 from mavros_msgs.srv import CommandBool, SetMode
 import numpy as np
 from start_up import Start
 
-def coordinates(radius);
+def coordinates(radius):
     theta = np.linspace(0,2*np.pi,1000)
     
     X = radius * np.cos(theta)
@@ -16,21 +16,40 @@ def coordinates(radius);
 
     return X,Y
 
-def motion(X,Y):
-    pos_pub = rospy.Publisher('setpoint_raw/local', PoseStamped, queue_size=10)
-    rate = rospy.Rate(20.0)
+def angular_velocity(x_y_vel,radius)
+    circ = 2 * np.pi * radius
+    circ_time = 1/x_y_vel
+    return (2*np.pi)/circ_time
+
+def motion(radius):
+
+    rospy.init_node('circle', anonymous=True)
+    rate = rospy.Rate(10.0)
+
+    X,Y = coordinates(radius)
+    pos_pub = rospy.Publisher('setpoint_position/local', PoseStamped, queue_size=1000)
+    vel_pub = rospy.Publisher('setpoint_velocity/cmd_vel', Twist, queue_size=1000)
 
     pose = PoseStamped()
+    vel = Twist()
+
+    vel.angular.x = angular_velocity(0.5,radius)
+    vel.linear.x = 0.5
+    vel.linear.y = 0.5
+
+    vel_pub(vel)
+
     iter = 0
 
     while not rospy.is_shutdown():
         if iter == len(X):
-            break
+            pose.pose.position.x = X[-1]
+            pose.pose.position.y = Y[-1]
 
         pose.pose.position.x = X[iter]
         pose.pose.position.y = Y[iter]
-        pose.pose.position.z = 5
-
+        pose.pose.position.z = 5 
+        
         pos_pub.publish(pose)
         
         iter += 1
@@ -38,7 +57,11 @@ def motion(X,Y):
         rate.sleep()
 
 
-if __name__ == __main__:
-    st = Start()
-    x, Y = coordinates(8)
-    motion(X,Y)
+if __name__ == '__main__':
+    set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
+    set_mode_srv(base_mode=0, custom_mode='GUIDED')
+
+    try:
+        motion(8)
+    except rospy.ROSInterruptException:
+        pass
