@@ -25,7 +25,7 @@ def takeoff():
         tf_srv = rospy.ServiceProxy('mavros/cmd/takeoff',mavros_msgs.srv.CommandTOL)
         tf_srv(altitude=2)
     except rospy.ServiceException as e:
-        print('Service takeoff call failed: %s' %e)
+        rospy.loginfo('Service takeoff call failed: %s' %e)
 
 if __name__=='__main__':
     #rospy.init_node('Takeoff', anonymous=True)

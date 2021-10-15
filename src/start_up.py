@@ -21,30 +21,34 @@ class Start():
     def get_state(self):
         return self.STATE
 
-
     def set_services(self):
         self.state_sub = rospy.Subscriber('mavros/state', State)
         self.arming_srv = rospy.ServiceProxy('mavros/cmd/arming', CommandBool)
         self.set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
 
     def set_arm(self):
-        #TODO: Put this in try/except
+        
         if not self.STATE.armed:
-            arming = self.arming_srv(True)
-            if arming.success:
-                rospy.loginfo('Armed')
-            else:
-                rospy.loginfo('Failed To Arm')
+            try:
+                arming = self.arming_srv(True)
+                if arming.success:
+                    rospy.loginfo('Armed')
+                else:
+                    rospy.loginfo('Failed To Arm')
+            except rospy.ServiceException as e:
+                    rospy.loginfo('Service call failed: %s' %e)
 
     def set_mode(self):
-        #TODO: put in try/ except
+        
         if self.STATE.mode != self.my_state:
-            mode = self.set_mode_srv(base_mode=0, custom_mode=self.my_state)
-            if mode.mode_sent:
-                rospy.loginfo(self.my_state +' mode set')
-            else:
-                rospy.loginfo('Failed to set mode to '+self.my_state)
-
+            try:
+                mode = self.set_mode_srv(base_mode=0, custom_mode=self.my_state)
+                if mode.mode_sent:
+                    rospy.loginfo(self.my_state +' mode set')
+                else:
+                    rospy.loginfo('Failed to set mode to '+self.my_state)
+            except rospy.ServiceException as e:
+                    rospy.loginfo('Service Call Failed: %s' %e)
     
 if __name__=='__main__':
 
