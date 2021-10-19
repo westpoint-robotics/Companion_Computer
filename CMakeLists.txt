@@ -213,12 +213,13 @@ include_directories(
 
 add_executable(offb_node
   src/offb_node.cpp
-  src/offb_node.py
   src/takeoff.py
   src/start_up.py
   src/RTL.py
   src/land.py
   src/circle.py
+  src/circle_global.py
+  src/square.py
 )
 
 target_link_libraries(offb_node
