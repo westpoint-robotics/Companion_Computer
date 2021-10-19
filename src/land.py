@@ -17,5 +17,5 @@ def setLand():
         else:
             rospy.loginfo('Failed to set mode to LAND')
 
-if __name__ == '__main__'
+if __name__ == '__main__':
     setLand()

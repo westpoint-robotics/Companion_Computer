@@ -27,7 +27,7 @@ def motion(radius):
     rate = rospy.Rate(10.0)
 
     X,Y = coordinates(radius)
-    pos_pub = rospy.Publisher('setpoint_position/local', PoseStamped, queue_size=1000)
+    pos_pub = rospy.Publisher('global_position/local', PoseStamped, queue_size=1000)
     vel_pub = rospy.Publisher('setpoint_velocity/cmd_vel', Twist, queue_size=1000)
 
     pose = PoseStamped()

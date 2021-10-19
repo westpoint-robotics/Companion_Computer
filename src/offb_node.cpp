@@ -46,14 +46,14 @@ int main(int argc, char **argv)
     }
 
     mavros_msgs::SetMode offb_set_mode;
-    offb_set_mode.request.custom_mode = "GUIDED";
+    offb_set_mode.request.custom_mode = "GUIDED_NOGPS";
 
     mavros_msgs::CommandBool arm_cmd;
     arm_cmd.request.value = true;
 
     ros::Time last_request = ros::Time::now();
 
-    if( current_state.mode != "GUIDED" &&
+    if( current_state.mode != "GUIDED_NOGPS" &&
         (ros::Time::now() - last_request > ros::Duration(0.0))){
         if( set_mode_client.call(offb_set_mode) &&
             offb_set_mode.response.mode_sent){
