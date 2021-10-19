@@ -1,3 +1,3 @@
 # Offboard
-Generic offboard scripts unsing mavros
+Generic offboard scripts using mavros
 
