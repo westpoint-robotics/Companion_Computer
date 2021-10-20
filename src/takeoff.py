@@ -3,19 +3,22 @@
 import rospy
 import mavros
 from geometry_msgs.msg import PoseStamped, Twist
-from mavros_msgs.msg import State, Altitude, PositionTarget  
+from mavros_msgs.msg import State, Altitude, PositionTarget, AttitudeTarget  
 from mavros_msgs.srv import *
 from start_up import *
+import time
 
 def takeoff():
     
-    local_pub = rospy.Publisher('mavros/setpoint_position/local',PoseStamped, queue = 10)
-    target_pub = rospy.Publisher('setpoint_raw/local', PositionTarget, queue_size = 10)
+    local_pub = rospy.Publisher('mavros/setpoint_position/local',PoseStamped, queue_size = 10)
+    target_pub = rospy.Publisher('mavros/setpoint_raw/local', PositionTarget, queue_size = 10)
+    att_pub = rospy.Publisher('mavros/setpoint_raw/attitude', AttitudeTarget, queue_size=10)
 
     rate = rospy.Rate(20.0)
 
     target = PositionTarget()
     pose = PoseStamped()
+    att = AttitudeTarget()
 
     pose.pose.position.x = 0
     pose.pose.position.y = 0
@@ -33,22 +36,26 @@ def takeoff():
     target.velocity.z = 0.5
     target.yaw = 0
 
+    att.body_rate.x = 0
+    att.body_rate.y = 0
+    att.body_rate.z = 0
+    att.thrust = 0.55
+    
+
     for _ in range(100):
         local_pub.publish(pose)
 
     while not rospy.is_shutdown():
         target_pub.publish(target)
+        att_pub.publish(att)
         rate.sleep()
     
-    #try:
-    #    tf_srv = rospy.ServiceProxy('mavros/cmd/takeoff',mavros_msgs.srv.CommandTOL)
-    #    tf_srv(altitude=1.5)
-    #except rospy.ServiceException as e:
-    #    rospy.loginfo('Service takeoff call failed: %s' %e)
 
 if __name__=='__main__':
     rospy.init_node('Takeoff', anonymous=True)
     st = Start()
+    time.sleep(5)
+    rospy.loginfo('Ready For Takeoff')
     takeoff()
     
 
