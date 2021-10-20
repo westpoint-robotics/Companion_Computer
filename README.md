@@ -1,2 +1,3 @@
-Offboard scripts for Tarot X6 Hexacopter.
+# Offboard
+Generic offboard scripts using mavros
 
