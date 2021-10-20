@@ -80,8 +80,11 @@ def motion():
     wp.z_alt = 5
     waypoint_l.waypoints.append(wp)
 
+    rospy.wait_for_service('mavros/mission/push')
+
     try:
-        if waypoint_srv.call(waypoint_l.waypoints).success:
+        push_success = waypoint_srv(start_index=0, waypoints=waypoint_l.waypoints)
+        if push_success.success:
             rospy.loginfo('Waypoints Sent Successfully')
         else:
             rospy.loginfo('Unable to send waypoints')
