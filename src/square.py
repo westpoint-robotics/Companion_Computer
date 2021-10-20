@@ -48,8 +48,8 @@ def motion():
     wp.command =16
     wp.is_current = True
     wp.autocontinue = True
-    wp.x_lat = -73.952799
-    wp.y_long = 41.391646
+    wp.x_lat = -73.953122
+    wp.y_long = 41.390917
     wp.z_alt = 7
     waypoint_l.waypoints.append(wp)
 
@@ -57,8 +57,8 @@ def motion():
     wp.command =16
     wp.is_current = True
     wp.autocontinue = True
-    wp.x_lat = -73.953039
-    wp.y_long = 41.391728
+    wp.x_lat = -73.953449
+    wp.y_long = 41.391004
     wp.z_alt = 7
     waypoint_l.waypoints.append(wp)
 
