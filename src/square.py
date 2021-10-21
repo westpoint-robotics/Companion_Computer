@@ -23,13 +23,13 @@ def motion():
     rospy.init_node('rectangle', anonymous=True)
     rate = rospy.Rate(10.0)
 
-    lat_long_sub = rospy.Subscriber('global_position/global', NavSatFix)
-    waypoint_sub = rospy.Subscriber('mission/waypoints',WaypointList)
+    lat_long_sub = rospy.Subscriber('mavros/global_position/global', NavSatFix)
+    waypoint_sub = rospy.Subscriber('mavros/mission/waypoints',WaypointList)
     
 
-    waypoint_pub = rospy.Publisher('mission/waypoints', WaypointList, queue_size=10)
-    vel_pub = rospy.Publisher('setpoint_velocity/cmd_vel_unstamped', Twist, queue_size=1000)
-    waypoint_srv = rospy.ServiceProxy('mission/push', WaypointPush)
+    waypoint_pub = rospy.Publisher('mavros/mission/waypoints', WaypointList, queue_size=10)
+    vel_pub = rospy.Publisher('mavros/setpoint_velocity/cmd_vel_unstamped', Twist, queue_size=1000)
+    waypoint_srv = rospy.ServiceProxy('mavros/mission/push', WaypointPush)
 
     vel = Twist()
     waypoint_l = WaypointList()
@@ -37,19 +37,19 @@ def motion():
 
     wp.frame = 0
     wp.command =16
-    wp.is_current = True
+    wp.is_current = False
     wp.autocontinue = True
-    wp.x_lat = -73.953220
-    wp.y_long = 41.390722
+    wp.y_long = -73.953220
+    wp.x_lat = 41.390722
     wp.z_alt = 5
     waypoint_l.waypoints.append(wp)
 
     wp.frame = 0
     wp.command =16
-    wp.is_current = True
+    wp.is_current = False
     wp.autocontinue = True
-    wp.x_lat = -73.953122
-    wp.y_long = 41.390917
+    wp.y_long = -73.953122
+    wp.x_lat = 41.390917
     wp.z_alt = 7
     waypoint_l.waypoints.append(wp)
 
@@ -57,8 +57,8 @@ def motion():
     wp.command =16
     wp.is_current = True
     wp.autocontinue = True
-    wp.x_lat = -73.953449
-    wp.y_long = 41.391004
+    wp.y_long = -73.953449
+    wp.x_lat = 41.391004
     wp.z_alt = 7
     waypoint_l.waypoints.append(wp)
 
@@ -66,8 +66,8 @@ def motion():
     wp.command =16
     wp.is_current = True
     wp.autocontinue = True
-    wp.x_lat = -73.953519
-    wp.y_long = 41.390800
+    wp.y_long = -73.953519
+    wp.x_lat = 41.390800
     wp.z_alt = 5
     waypoint_l.waypoints.append(wp)
 
@@ -75,8 +75,8 @@ def motion():
     wp.command =16
     wp.is_current = True
     wp.autocontinue = True
-    wp.x_lat = -73.953220
-    wp.y_long = 41.390722
+    wp.y_long = -73.953220
+    wp.x_lat = 41.390722
     wp.z_alt = 5
     waypoint_l.waypoints.append(wp)
 
@@ -89,7 +89,7 @@ def motion():
         else:
             rospy.loginfo('Unable to send waypoints')
     except rospy.ServiceException as e:
-        rospy.loginfo('Service call faild: %i' %e)
+        rospy.loginfo('Service call faild: %s' %e)
 
 
     while not rospy.is_shutdown():

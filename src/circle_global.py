@@ -27,8 +27,8 @@ def motion(radius):
     rate = rospy.Rate(10.0)
 
     X,Y = coordinates(radius)
-    pos_pub = rospy.Publisher('global_position/local', PoseStamped, queue_size=1000)
-    vel_pub = rospy.Publisher('setpoint_velocity/cmd_vel', Twist, queue_size=1000)
+    pos_pub = rospy.Publisher('mavros/global_position/local', PoseStamped, queue_size=1000)
+    vel_pub = rospy.Publisher('mavros/setpoint_velocity/cmd_vel', Twist, queue_size=1000)
 
     pose = PoseStamped()
     vel = Twist()
@@ -42,26 +42,27 @@ def motion(radius):
     iter = 0
 
     while not rospy.is_shutdown():
-        if iter == len(X):
-            pose.pose.position.x = X[-1]
-            pose.pose.position.y = Y[-1]
+        if iter-1 == len(X):
+            pose.pose.position.x = 2
+            pose.pose.position.y = 2
+            pose.pose.position.z = 10
+            break
 
         pose.pose.position.x = X[iter]
         pose.pose.position.y = Y[iter]
-        pose.pose.position.z = 1.5
+        pose.pose.position.z = 2
         
         pos_pub.publish(pose)
         
-        iter += 1
-
         rate.sleep()
-
+        iter+=1
+        print(iter)
 
 if __name__ == '__main__':
     set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
-    set_mode_srv(base_mode=0, custom_mode='GUIDED_NOGPS')
+    set_mode_srv(base_mode=0, custom_mode='GUIDED')
 
     try:
-        motion(0.5)
+        motion(5)
     except rospy.ROSInterruptException:
         pass
