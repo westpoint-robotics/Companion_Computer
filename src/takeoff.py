@@ -53,6 +53,7 @@ def takeoff():
 
 if __name__=='__main__':
     rospy.init_node('Takeoff', anonymous=True)
+    rospy.loginfo('Initialized takeoff node')
     st = Start()
     time.sleep(5)
     rospy.loginfo('Ready For Takeoff')

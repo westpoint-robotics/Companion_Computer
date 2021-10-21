@@ -2,7 +2,7 @@
 
 import rospy
 import mavros
-from geometry_msgs.msg import PoseStamped, Twist
+from geometry_msgs.msg import PoseStamped, TwistStamped
 from mavros_msgs.msg import State 
 from mavros_msgs.srv import CommandBool, SetMode
 import numpy as np
@@ -23,15 +23,14 @@ def angular_velocity(x_y_vel,radius):
 
 def motion(radius):
 
-    rospy.init_node('circle', anonymous=True)
     rate = rospy.Rate(10.0)
 
     X,Y = coordinates(radius)
     pos_pub = rospy.Publisher('mavros/setpoint_position/local', PoseStamped, queue_size=1000)
-    vel_pub = rospy.Publisher('mavros/setpoint_velocity/cmd_vel', Twist, queue_size=1000)
+    vel_pub = rospy.Publisher('mavros/setpoint_velocity/cmd_vel', TwistStamped, queue_size=1000)
 
     pose = PoseStamped()
-    vel = Twist()
+    vel = TwistStamped()
 
     vel.angular.x = angular_velocity(0.5,radius)
     vel.linear.x = 0.5
@@ -60,9 +59,21 @@ def motion(radius):
 
 
 if __name__ == '__main__':
-    set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
-    set_mode_srv(base_mode=0, custom_mode='GUIDED')
 
+    rospy.init_node('circle', anonymous=True)
+    rospy.loginfo('Circle Node initialized')
+    set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
+    
+    rospy.wait_for_service('mavros/set_mode')
+
+    try:
+        mode_success = set_mode_srv(base_mode=0, custom_mode='GUIDED')
+        if mode_success.mode_sent:
+            rospy.loginfo('Guided Mode Set')
+        else:
+            rospy.loginfo('Unable to set Guided mode')
+    except rospy.ServiceException as e:
+            rospy.loginfo('Service Call Failed: %s' %e)
     try:
         motion(5)
     except rospy.ROSInterruptException:

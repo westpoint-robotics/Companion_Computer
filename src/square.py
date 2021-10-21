@@ -20,7 +20,6 @@ def coordinates(radius,center_x,center_y):
 
 def motion():
 
-    rospy.init_node('rectangle', anonymous=True)
     rate = rospy.Rate(10.0)
 
     lat_long_sub = rospy.Subscriber('mavros/global_position/global', NavSatFix)
@@ -98,10 +97,22 @@ def motion():
 
 
 if __name__ == '__main__':
+
+    rospy.init_node('rectangle', anonymous=True)
+
     set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
-    if State().mode != 'GUIDED':
-        set_mode_srv(base_mode=0, custom_mode='GUIDED')
     
+    rospy.wait_for_service('mavros/set_mode')
+    
+    try:
+        if State().mode != 'GUIDED':
+            set_mode_srv(base_mode=0, custom_mode='GUIDED')
+            rospy.loginfo('Guided mode set')
+        else:
+            rospy.loginfo('Guided mode already set')
+    except rospy.ServiceException as e:
+        rospy.loginfo('Service call failed: %s' %e)
+
     try:
         motion()
     except rospy.ROSInterruptException:

@@ -40,6 +40,8 @@ class Start():
 
     def set_mode(self):
         
+        rospy.wait_for_service('mavros/set_mdoe')
+
         if self.STATE.mode != self.my_state:
             try:
                 mode = self.set_mode_srv(base_mode=0, custom_mode=self.my_state)
@@ -49,7 +51,8 @@ class Start():
                     rospy.loginfo('Failed to set mode to '+self.my_state)
             except rospy.ServiceException as e:
                     rospy.loginfo('Service Call Failed: %s' %e)
-    
+        else:
+            rospy.loginfo('Guided mode already set')
 if __name__=='__main__':
 
     st =  Start()
