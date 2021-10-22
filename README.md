@@ -5,6 +5,6 @@ Generic scripts to control a Pixhawk-based UAS through MAVROS running on an onbo
 
 # Install
 Clone this repository in 
-'''bash
+```bash
   /catkin_ws/src
-'''
+```
