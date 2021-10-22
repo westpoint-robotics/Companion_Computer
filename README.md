@@ -23,4 +23,4 @@ for Ardupilot, and
 ```python
 self.my_state = "OFFBOARD" 
 ```
-for PX$
+for PX4.
