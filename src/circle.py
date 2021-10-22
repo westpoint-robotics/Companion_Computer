@@ -32,9 +32,10 @@ def motion(radius):
 
     pose = PoseStamped()
     yaw = PositionTarget()
+    vel = Twist()
 
     yaw.yaw = angular_velocity(0.5,radius)
-    
+
     vel.linear.x = 0.5
     vel.linear.y = 0.5
 
