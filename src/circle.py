@@ -2,7 +2,7 @@
 
 import rospy
 import mavros
-from geometry_msgs.msg import PoseStamped, TwistStamped
+from geometry_msgs.msg import PoseStamped, TwistStamped, PositionTarget
 from mavros_msgs.msg import State 
 from mavros_msgs.srv import CommandBool, SetMode
 import numpy as np
@@ -27,12 +27,14 @@ def motion(radius):
 
     X,Y = coordinates(radius)
     pos_pub = rospy.Publisher('mavros/setpoint_position/local', PoseStamped, queue_size=1000)
-    vel_pub = rospy.Publisher('mavros/setpoint_velocity/cmd_vel', TwistStamped, queue_size=1000)
+    yaw_pub = rospy.Publisher('mavros/setpoint_raw/local', PositionTarget, queue_size=1000)
+    vel_pub = rospy.Publisher('mavros/setpoint_velocity/cmd_vel_unstamped', Twist, queue_size = 10)
 
     pose = PoseStamped()
-    vel = TwistStamped()
+    yaw = PositionTarget()
 
-    vel.angular.x = angular_velocity(0.5,radius)
+    yaw.yaw = angular_velocity(0.5,radius)
+    
     vel.linear.x = 0.5
     vel.linear.y = 0.5
 
@@ -45,14 +47,16 @@ def motion(radius):
             pose.pose.position.x = 2
             pose.pose.position.y = 2
             pose.pose.position.z = 10
+            pos_pub.publish(pose)
             break
-
+        
         pose.pose.position.x = X[iter]
         pose.pose.position.y = Y[iter]
         pose.pose.position.z = 2
         
         pos_pub.publish(pose)
-        
+        yaw_pub.publish(yaw)
+
         iter += 1
 
         rate.sleep()
@@ -65,16 +69,13 @@ if __name__ == '__main__':
     set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
     
     rospy.wait_for_service('mavros/set_mode')
+    
+    st = Start()
+    
+    st.set_mode()
 
-    try:
-        mode_success = set_mode_srv(base_mode=0, custom_mode='GUIDED')
-        if mode_success.mode_sent:
-            rospy.loginfo('Guided Mode Set')
-        else:
-            rospy.loginfo('Unable to set Guided mode')
-    except rospy.ServiceException as e:
-            rospy.loginfo('Service Call Failed: %s' %e)
     try:
         motion(5)
     except rospy.ROSInterruptException:
         pass
+

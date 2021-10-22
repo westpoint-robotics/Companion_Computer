@@ -6,6 +6,7 @@ import math
 from geometry_msgs.msg import PoseStamped, TwistStamped
 from mavros_msgs.msg import State 
 from mavros_msgs.srv import CommandBool, SetMode
+from start_up import Start
 
 def motion(radius):
 
@@ -46,16 +47,9 @@ if __name__ == '__main__':
     rospy.loginfo('Helix Node initialized')
     set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
     
-    rospy.wait_for_service('mavros/set_mode')
+    st = Start()
+    st.set_mode()
 
-    try:
-        mode_success = set_mode_srv(base_mode=0, custom_mode='GUIDED')
-        if mode_success.mode_sent:
-            rospy.loginfo('Guided Mode Set')
-        else:
-            rospy.loginfo('Unable to set Guided mode')
-    except rospy.ServiceException as e:
-            rospy.loginfo('Service Call Failed: %s' %e)
     try:
         motion(5)
     except rospy.ROSInterruptException:

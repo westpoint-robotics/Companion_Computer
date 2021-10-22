@@ -99,19 +99,10 @@ def motion():
 if __name__ == '__main__':
 
     rospy.init_node('rectangle', anonymous=True)
+    rospy.loginfo('Rectangle node set')
 
-    set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
-    
-    rospy.wait_for_service('mavros/set_mode')
-    
-    try:
-        if State().mode != 'GUIDED':
-            set_mode_srv(base_mode=0, custom_mode='GUIDED')
-            rospy.loginfo('Guided mode set')
-        else:
-            rospy.loginfo('Guided mode already set')
-    except rospy.ServiceException as e:
-        rospy.loginfo('Service call failed: %s' %e)
+    st = Start()
+    st.set_mode()
 
     try:
         motion()
