@@ -12,4 +12,4 @@ Then run
 ```bash
 catkin_make
 ```
-in the ```bash /catkin_ws ``` directory.
+in the ```/catkin_ws ``` directory.
