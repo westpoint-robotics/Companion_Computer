@@ -90,6 +90,16 @@ def motion():
     except rospy.ServiceException as e:
         rospy.loginfo('Service call faild: %s' %e)
 
+    rospy.wait_for_service('mavros/set_mode')
+    set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
+    try:
+        mode = set_mode_srv(base_mode=0, custom_mode='AUTO')
+        if mode.mode_sent:
+            rospy.loginfo('Auto mode set')
+        else:
+            rospy.logwarn('Failed to set Auto Mode')
+    except rsopy.ServiceException as e 
+            rospy.logwarn('Service Call Failed: %s' %e)
 
     while not rospy.is_shutdown():
 
