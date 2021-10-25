@@ -15,7 +15,7 @@ catkin_make
 in the ```/catkin_ws ``` directory.
 
 # PX4 vs Ardupilot
-Use the ```my_state``` variable in ```start_up.py``` to make the scripts usable for PX4 and Ardupilot. Use
+Use the ```self.my_state``` variable in ```start_up.py``` to make the scripts usable for PX4 and Ardupilot. Use
 ```python
 self.my_state = "GUIDED"
 ```
