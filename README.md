@@ -7,7 +7,7 @@ Generic scripts to control a Pixhawk-based UAS through MAVROS running on an onbo
 
 ### Companion Computer OS Configuration
 Configure ubuntu 20.04 appropraitely depending on your companion computer. It can be downloaded [here](https://ubuntu-mate.org/download/)
-  - Raspberry Pi 4 / Odroid: Download the armhf 32 bit version [here](https://ubuntu-mate.org/download/armhf/) onto an sd-card and configure it following the directions based on what OS your main laptop is running. [Linux](https://itsfoss.com/format-usb-drive-sd-card-ubuntu/) [Windows](https://ubuntu.com/download/iot/installation-media) (scroll to "On Windows" section).
+  - Raspberry Pi 4 / Odroid: Download the armhf 32 bit version [here](https://ubuntu-mate.org/download/armhf/) onto an sd-card and configure it following the directions based on what OS your main laptop is running. [Linux](https://itsfoss.com/format-usb-drive-sd-card-ubuntu/) or [Windows](https://ubuntu.com/download/iot/installation-media) (scroll to "On Windows" section).
   - Up Core: Follow the instruction on this [page](https://github.com/up-board/up-community/wiki/Ubuntu_20.04).
   - Intel NUC: NUC's from the RRC should already be running 18.04, this is okay.
 
