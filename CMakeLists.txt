@@ -221,6 +221,8 @@ add_executable(offb_node
   src/circle_global.py
   src/square.py
   src/helix.py
+  src/line.py
+  src/yaw.py
 )
 
 target_link_libraries(offb_node

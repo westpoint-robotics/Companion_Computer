@@ -74,8 +74,8 @@ def motion():
     wp.command =16
     wp.is_current = True
     wp.autocontinue = True
-    wp.y_long = -73.953220
-    wp.x_lat = 41.390722
+    wp.y_long = -73.95000
+    wp.x_lat = 41.50
     wp.z_alt = 5
     waypoint_l.waypoints.append(wp)
 
@@ -98,7 +98,7 @@ def motion():
             rospy.loginfo('Auto mode set')
         else:
             rospy.logwarn('Failed to set Auto Mode')
-    except rsopy.ServiceException as e 
+    except rospy.ServiceException as e: 
             rospy.logwarn('Service Call Failed: %s' %e)
 
     while not rospy.is_shutdown():

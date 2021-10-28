@@ -11,7 +11,7 @@ class Start():
 
     def __init__(self):
         self.STATE = State()
-        self.my_state = 'GUIDED'
+        self.my_state = 'GUIDED_NOGPS'
         self.Altitude = Altitude()
         
 

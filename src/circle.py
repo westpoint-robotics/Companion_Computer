@@ -2,10 +2,13 @@
 
 import rospy
 import mavros
-from geometry_msgs.msg import PoseStamped, TwistStamped, PositionTarget
-from mavros_msgs.msg import State 
+import rosbag
+from geometry_msgs.msg import PoseStamped, TwistStamped, Twist
+from mavros_msgs.msg import State, PositionTarget
+from std_msgs.msg import Float32 
 from mavros_msgs.srv import CommandBool, SetMode
 import numpy as np
+import datetime as dt
 from start_up import Start
 
 def coordinates(radius):
@@ -24,6 +27,7 @@ def angular_velocity(x_y_vel,radius):
 def motion(radius):
 
     rate = rospy.Rate(10.0)
+    bag = rosbag.Bag('bag_files/Circle-bag-'+str(dt.datetime.now())+'.bag', 'w')
 
     X,Y = coordinates(radius)
     pos_pub = rospy.Publisher('mavros/setpoint_position/local', PoseStamped, queue_size=1000)
@@ -40,6 +44,8 @@ def motion(radius):
     vel.linear.y = 0.5
 
     vel_pub.publish(vel)
+
+    bag.write('Velocity', vel)
 
     iter = 0
 
@@ -58,9 +64,14 @@ def motion(radius):
         pos_pub.publish(pose)
         yaw_pub.publish(yaw)
 
+        bag.write('Pose', pose)
+        bag.write('Yaw', yaw)
+
         iter += 1
 
         rate.sleep()
+    
+    bag.close()
 
 
 if __name__ == '__main__':
