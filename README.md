@@ -16,7 +16,7 @@ Now that an ubuntu operating system is downloaded we can install ROS and mavros.
   - ROS Noetic: Follow the instructions at the page [here](http://wiki.ros.org/noetic/Installation/Ubuntu)
   - Mavros: Once ROS Noetic is installed use the following command to install Mavros
     ```
-    sudo apt-get install ros-kinetic-mavros ros-kinetic-mavros-extras
+    sudo apt-get install ros-noetic-mavros ros-noetic-mavros-extras
     ```
     You will also need GeographicLib which can be installed with these commands;
     ```
@@ -35,7 +35,7 @@ Now that an ubuntu operating system is downloaded we can install ROS and mavros.
   - IP Address
     Run:
     ```
-    sudo apt-get install net tools
+    sudo apt-get install nettools
     ```
     Then use the command
     ```
